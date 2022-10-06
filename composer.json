@@ -1,0 +1,46 @@
+{
+  "name": "aldeebhasan/lottie-laravel",
+  "description": "This package will allow you to manage and preview lottiefiles in your laravel project",
+  "type": "library",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": [
+    "lottie",
+    "lottiefiles",
+    "lottiefiles manageer",
+    "lottie preview",
+    "laravel"
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Aldeebhasan\\LottieLaravel\\": "src/"
+    },
+    "files": [
+      "Utilities/helpers.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Hasan Deeb",
+      "email": "aldeeb.91@gmail.com",
+      "homepage": "https://hasan-deeb.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.3"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Aldeebhasan\\LottieLaravel\\LottieLaravelServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
+  }
+}
