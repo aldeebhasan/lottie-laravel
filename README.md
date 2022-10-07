@@ -114,7 +114,7 @@ $content = lottie()->loadUrl("https://example.json");
     :data='$data2' />
 ```
 
-<img  src="https://drive.google.com/uc?export=view&amp;id=1cstgb1OG1_-xnC6fI-5TbB-2CF_ezY3r" width="250"/> |  <img src="https://drive.google.com/uc?export=view&id=1kVGz7O2IwuDZzL_ookfo2xOeCUpYhbA_" width=250>
+<img  src="https://user-images.githubusercontent.com/62222392/194541107-37fb0f4f-0a34-42ab-a854-8811ebb5e24a.gif" width="250"/> |  <img src="https://user-images.githubusercontent.com/62222392/194541252-d89a9f29-e8be-4156-ba82-b44612442815.gif" width=250>
 
 
 ## License
