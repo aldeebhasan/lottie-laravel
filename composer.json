@@ -17,7 +17,7 @@
       "Aldeebhasan\\LottieLaravel\\": "src/"
     },
     "files": [
-      "Utilities/helpers.php"
+      "utilities/helpers.php"
     ]
   },
   "authors": [
