@@ -27,7 +27,7 @@ Basic Usage
 
 ### Lottie file component
 
-you can use the lottie file component directly within your blade as following
+You can use the lottie file component directly within your blade as following
 ```php
  <x-lottie 
  class="some css classes" 
@@ -42,15 +42,15 @@ you can use the lottie file component directly within your blade as following
  </x-lottie>
 ```
 
-all the attributes are optional but note that either 
+All the attributes are optional. Anyway, either 
 `path` or `animationData` should be specified in order to 
 display the lottie. 
 
 ### Lottie files manager
-the package also provide a manager to manage the lottie files and make updates
+The package also provide a manager to manage the lottie files and make updates
 over them(like changing the colors)
 
-**you can load the lottie file from remote url or directly using the following**
+**You can load the lottie file from remote url or pass the file content directly. Check the following**
 
 ```php
 use \Aldeebhasan\LottieLaravel\Facades\Lottie;
@@ -59,8 +59,8 @@ $content = Lottie::loadUrl("https://example.json");
 //from local array
 $content = Lottie::loadData([]);
 ```
-After loading the lottie file in the manager you can 
-change the colors of the file using the following 
+After loading the lottie file to the manager you can 
+change the colors  using one of the following 
 ```php
 $content = Lottie::loadUrl("https://example.json")
    ->replaceColor("#000","#0f0f0f") // color with color
@@ -73,7 +73,7 @@ $content = Lottie::loadUrl("https://example.json")
    ->replaceColor("rgb(0,0,0)",'rgba(255,255,0)'); // color with color
 ```
 
-To retrieve the updated lottie data you can use our export function:
+To retrieve the updated lottie data you can use our `export` function:
 
 ```php
 $content = Lottie::loadUrl("https://example.json")
@@ -82,14 +82,14 @@ $content = Lottie::loadUrl("https://example.json")
 ```
 
 Finally, thanks for the [lottie-web](https://github.com/airbnb/lottie-web) package author, 
-without their lottie player we were not able to complete this work.
+without their lottie player, we were not able to complete this work.
 
 **You can directly get an instance from the lottie manager using our helper function `lottie()`**
 ```php
 $content = lottie()->loadUrl("https://example.json");
 ```
 ### Examples
-- Loading lottie file directly to the blade:
+- Loading lottie file directly in the blade:
 ```php
 <x-lottie 
     class="w-50" 
@@ -114,8 +114,6 @@ $content = lottie()->loadUrl("https://example.json");
     :data='$data2' />
 ```
 
-Solarized dark             |  Solarized Ocean
-:-------------------------:|:-------------------------:
 <img  src="https://drive.google.com/uc?export=view&amp;id=1cstgb1OG1_-xnC6fI-5TbB-2CF_ezY3r" width="250"/> |  <img src="https://drive.google.com/uc?export=view&id=1kVGz7O2IwuDZzL_ookfo2xOeCUpYhbA_" width=250>
 
 
