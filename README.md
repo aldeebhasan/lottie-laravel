@@ -142,7 +142,7 @@ $data = lottie()->loadUrl('https://assets8.lottiefiles.com/packages/lf20_tuzu65B
 
 ## License
 
-Laravel Multi Agent package is licensed under [The MIT License (MIT)](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt).
+Laravel Lottie Library package is licensed under [The MIT License (MIT)](https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt).
 
 ## Security contact information
 
