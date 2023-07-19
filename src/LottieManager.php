@@ -2,12 +2,11 @@
 
 namespace Aldeebhasan\LottieLaravel;
 
-
+use Aldeebhasan\LottieLaravel\Components\LottieComponent;
 use Illuminate\Support\Facades\Http;
 
 class LottieManager
 {
-
     private $data;
 
     public static function make(...$paramteres): LottieManager
@@ -17,19 +16,32 @@ class LottieManager
 
     /***
      * load data from remote file
-     * @param string $url
+     * @param  string  $url
      * @return $this
      */
     public function loadUrl(string $url): LottieManager
     {
-        $data = Http::get($url)->body();
-        $this->data = (array)json_decode($data);
+        $this->data = $this->loadRemoteUrl($url);
         return $this;
+    }
+
+    private function loadRemoteUrl(string $url): array
+    {
+        $retrieveFn = function ($url) {
+            $data = Http::get($url)->body();
+            return (array) json_decode($data);
+        };
+        $cachePeriod = config('lottie.cache-period');
+        if (config('lottie.cache', false)) {
+            return cache()->remember("lottie.$url", $cachePeriod, fn () => $retrieveFn($url));
+        }
+        return $retrieveFn($url);
+
     }
 
     /***
      * load data directly in the manager
-     * @param array $data
+     * @param  array  $data
      * @return $this
      */
     public function loadData(array $data): LottieManager
@@ -40,9 +52,8 @@ class LottieManager
 
 
     /***
-     * after doing many operatio over the lottie file you can export the updated data
-     * @param array $data
-     * @return $this
+     * export the loaded data
+     * @return array
      */
     public function export(): array
     {
@@ -50,25 +61,44 @@ class LottieManager
     }
 
     /***
+     * render lottie data directly as a view
+     * @return string
+     */
+    public function render(
+        string $animType = 'svg',
+        bool $loop = true,
+        bool $autoplay = true,
+        string $class = '',
+        string $style = ''
+    ): string {
+        $data = $this->data;
+        return (new LottieComponent())
+            ->render()([
+            'attributes' => compact('data', 'animType', 'autoplay', 'loop', 'class', 'style')
+        ]);
+    }
+
+
+    /***
      * replace any color / set of color in the lottie file with another  color / set of color
-     * @param string|array $source
-     * @param string|array $target
+     * @param  string|array  $source
+     * @param  string|array  $target
      * @return $this
      * @throws \Throwable
      */
-    function replaceColor($source, $target): LottieManager
+    public function replaceColor($source, $target): LottieManager
     {
         throw_if(!$this->data, \Error::class, "Data or url need to be loaded first");
         if (is_array($source)) {
             if (is_array($target) && count($source) == count($target)) {
-                array_map(fn($s, $t) => $this->replaceColor($s, $t), $source, $target);
+                array_map(fn ($s, $t) => $this->replaceColor($s, $t), $source, $target);
             } else {
-                array_map(fn($s) => $this->replaceColor($s, $target), $source);
+                array_map(fn ($s) => $this->replaceColor($s, $target), $source);
             }
         } else {
             //encode colors with lottie encoding
-            $source = array_map(fn($x) => round($x / 255, 2), $this->decodeColor($source));
-            $target = array_map(fn($x) => round($x / 255, 2), $this->decodeColor($target));
+            $source = array_map(fn ($x) => round($x / 255, 2), $this->decodeColor($source));
+            $target = array_map(fn ($x) => round($x / 255, 2), $this->decodeColor($target));
 
             //change the color
             try {
@@ -85,11 +115,11 @@ class LottieManager
      * @param $src
      * @param $trg
      */
-    private function replace(&$array, $src, $trg)
+    private function replace(&$array, $src, $target): void
     {
         foreach ($array as $key => &$value) {
             if (is_object($value)) {
-                $value = (array)$value;
+                $value = (array) $value;
             }
 
             if ($key == 'c' && is_array($value)) {
@@ -100,15 +130,15 @@ class LottieManager
                         $src['g'] == round($colors[1], 2) &&
                         $src['b'] == round($colors[2], 2)
                     ) {
-                        $value['k'][0] = $trg['r'];
-                        $value['k'][1] = $trg['g'];
-                        $value['k'][2] = $trg['b'];
+                        $value['k'][0] = $target['r'];
+                        $value['k'][1] = $target['g'];
+                        $value['k'][2] = $target['b'];
                     }
                     return;
                 }
             }
             if (is_array($value)) {
-                $this->replace($value, $src, $trg);
+                $this->replace($value, $src, $target);
             }
         }
     }
@@ -117,13 +147,11 @@ class LottieManager
     /***
      * convert  color from string to  rgb array
      * @param $color
-     * @param false $alpha
+     * @param  false  $alpha
      * @return array
      */
     private function decodeColor($color, $alpha = false): array
     {
-
-
         if (str_starts_with($color, 'rgb')) {
             return $this->parseRGBa($color);
         }
@@ -133,10 +161,10 @@ class LottieManager
     /***
      * convert hex string to  rgb array
      * @param $hex
-     * @param false $alpha
+     * @param  bool  $alpha
      * @return array
      */
-    private function hexToRgb($hex, $alpha = false): array
+    private function hexToRgb($hex, bool $alpha = false): array
     {
         $hex = str_replace('#', '', $hex);
         $length = strlen($hex);

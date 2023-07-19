@@ -11,8 +11,16 @@ class LottieLaravelServiceProvider extends ServiceProvider
     public function boot()
     {
         // Views
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'lottie');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'lottie');
+        //config
+        $this->mergeConfigFrom(
+            __DIR__.'/../config/lottie.php',
+            'lottie'
+        );
 
+        $this->publishes([
+            __DIR__.'/../config/lottie.php' => config_path('lottie.php')
+        ], 'config');
     }
 
     public function register()

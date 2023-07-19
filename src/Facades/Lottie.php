@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static LottieManager loadData(array $data)
  * @method static array export()
  * @method static LottieManager replaceColor($source, $target)
+ * @method static string render(string $animType = 'svg', bool $loop = true, bool $autoplay = true, string $class = '', string $style = '')
  *
  * @see LottieManager
  */

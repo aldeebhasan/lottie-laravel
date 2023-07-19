@@ -9,17 +9,17 @@ Installation
 Install using composer:
 
 ```bash
-composer require aldeebhasan/lottie-laravel
+composer require aldeebhasan/lottie-laravel:1.1.0
 ```
 
-**Next**: You should use the script file from here: https://cdnjs.com/libraries/bodymovin,
-and include it in your html page:
-```html
-<head>
-    ......
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js" ></script>
-    ......
-<head>
+A new cache capabilities added to the package, you can enable it by using the following keys to your env file:
+```
+LOTTIE_CACHE=false
+LOTTIE_CACHE_PERIOD=60
+```
+you can publish the config file using the following command:
+```
+php artisan vendor:publish --provider="Aldeebhasan\LottieLaravel\LottieLaravelServiceProvider" --tag="config"
 ```
 
 Basic Usage
@@ -30,12 +30,12 @@ Basic Usage
 You can use the lottie file component directly within your blade as following
 ```php
  <x-lottie 
- class="some css classes" 
- style="some css styles" 
+ class="class-1 class-2" 
+ style="color:red; background-color:blue;" 
  path="path to lottie file (.json)"
  animType="animation type (ex: svg)"
- :loop="true or false"
- autoplay="autoplay"
+ loop="true|false"
+ autoplay="true|false"
  :data="array of the lottie file content"
  >
  
@@ -57,7 +57,17 @@ use \Aldeebhasan\LottieLaravel\Facades\Lottie;
 //from remote
 $content = Lottie::loadUrl("https://example.json");
 //from local array
-$content = Lottie::loadData([]);
+$content = Lottie::loadData([ 
+    "v" => "4.8.0", 
+    "meta" => [
+         "g" => "LottieFiles AE 3.0.2", 
+         "a" => "", 
+         "k" => "", 
+         "d" => "", 
+         "tc" => "" 
+      ], 
+      ....
+    ]);
 ```
 After loading the lottie file to the manager you can 
 change the colors  using one of the following 
@@ -88,6 +98,18 @@ without their lottie player, we were not able to complete this work.
 ```php
 $content = lottie()->loadUrl("https://example.json");
 ```
+### Direct Rendering
+now you can render the desired lottie file directly in your blade files. 
+Only you need to provide the lottie file data or path, and you will get your view back.
+```php
+//From  URL
+{!! lottie()->loadUrl('https://assets8.lottiefiles.com/packages/lf20_tuzu65Bu6N.json')->render() !!}
+
+//From Data
+$data = lottie()->loadUrl('https://assets8.lottiefiles.com/packages/lf20_tuzu65Bu6N.json')->export();
+{!! lottie()->loadData($data)->render() !!}
+```
+
 ### Examples
 - Loading lottie file directly in the blade:
 ```php
@@ -102,7 +124,7 @@ $content = lottie()->loadUrl("https://example.json");
             ->loadUrl('https://assets8.lottiefiles.com/packages/lf20_PmGV4skHBv.json')
             ->export())
 <x-lottie 
-    :loop="true"   
+    loop="true"   
     :data='$data' />
 
 @php($data2 = lottie()
@@ -110,8 +132,9 @@ $content = lottie()->loadUrl("https://example.json");
             ->replaceColor(["#70D0EF","#B7B7B7","#FF5900"],["#F64848","#FFA900","#003BFF"])
             ->export())
 <x-lottie 
-    :loop="true"   
+    loop="true"   
     :data='$data2' />
+
 ```
 
 <img  src="https://user-images.githubusercontent.com/62222392/194541107-37fb0f4f-0a34-42ab-a854-8811ebb5e24a.gif" width="250"/> |  <img src="https://user-images.githubusercontent.com/62222392/194541252-d89a9f29-e8be-4156-ba82-b44612442815.gif" width=250>
