@@ -3,6 +3,7 @@
 namespace Aldeebhasan\LottieLaravel\Tests;
 
 use Aldeebhasan\LottieLaravel\Facades\Lottie;
+use Aldeebhasan\LottieLaravel\LottieAsset;
 use Aldeebhasan\LottieLaravel\LottieManager;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Http;
@@ -40,7 +41,7 @@ class LottieManagerTest extends TestCase
     public function test_it_renders_directly_and_via_component(): void
     {
         $html = lottie()->loadData($this->sample())->render();
-        $this->assertStringContainsString('bodymovin.loadAnimation', $html);
+        $this->assertStringContainsString('lottie.loadAnimation', $html);
 
         $html = Blade::render('<x-lottie path="https://example.com/anim.json" />');
         $this->assertStringContainsString("path: 'https://example.com/anim.json'", $html);
@@ -70,5 +71,25 @@ class LottieManagerTest extends TestCase
         $this->assertStringContainsString("matchMedia('(prefers-reduced-motion: reduce)')", $html);
         $this->assertStringContainsString('autoplay: autoplay && !reducedMotion.matches', $html);
         $this->assertStringContainsString('@media (prefers-reduced-motion: reduce)', $html);
+    }
+
+    public function test_it_serves_the_bundled_player(): void
+    {
+        $response = $this->get(LottieAsset::url());
+
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'application/javascript; charset=utf-8');
+        $this->assertStringContainsString('max-age=31536000', $response->headers->get('Cache-Control'));
+        $this->assertStringContainsString('version="'.LottieAsset::VERSION.'"', file_get_contents(LottieAsset::path()));
+
+        $this->get(LottieAsset::url(), ['If-None-Match' => $response->headers->get('ETag')])->assertStatus(304);
+    }
+
+    public function test_it_uses_the_bundled_player_instead_of_a_cdn(): void
+    {
+        $html = lottie()->loadData($this->sample())->render();
+
+        $this->assertStringContainsString('<script src="'.LottieAsset::url().'"></script>', $html);
+        $this->assertStringNotContainsString('cdnjs', $html);
     }
 }

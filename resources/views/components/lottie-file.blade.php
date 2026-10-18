@@ -62,7 +62,7 @@
         }
 
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <script src="{{ \Aldeebhasan\LottieLaravel\LottieAsset::url() }}"></script>
 @endonce
 
 <div style="position: relative;{{ $style }}" class="{{ $class }}"
@@ -79,7 +79,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const autoplay = {{$autoplay ?'true' : 'false'}};
         const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-        const anim = bodymovin.loadAnimation({
+        const anim = lottie.loadAnimation({
             wrapper: document.getElementById('{{$key}}'),
             animType: '{{$animType}}',
             loop: {{$loop ?'true' : 'false'}},

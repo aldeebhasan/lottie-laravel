@@ -28,6 +28,9 @@ you can publish the config file using the following command:
 php artisan vendor:publish --provider="Aldeebhasan\LottieLaravel\LottieLaravelServiceProvider" --tag="config"
 ```
 
+The lottie-web player (v5.13.0) is bundled with the package and served from
+`/lottie-laravel/lottie.min.js`, so no CDN or asset publishing is needed.
+
 Basic Usage
 -----------
 

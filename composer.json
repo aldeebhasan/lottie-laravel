@@ -2,7 +2,7 @@
   "name": "aldeebhasan/lottie-laravel",
   "description": "This package will allow you to manage and preview lottiefiles in your laravel project",
   "type": "library",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "license": "MIT",
   "keywords": [
     "lottie",
