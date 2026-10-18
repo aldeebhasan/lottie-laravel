@@ -26,7 +26,8 @@ class LottieComponent extends Component
                     'data'     => $attributes['data'] ?? null,
                     'path'     => $attributes['path'] ?? null,
                     'class'    => $attributes['class'] ?? "",
-                    'style'    => $attributes['style'] ?? ""
+                    'style'    => $attributes['style'] ?? "",
+                    'alt'      => $attributes['alt'] ?? ""
                 ])->render();
             } catch (\Exception $e) {
                 return '<p style="color: red">Error in rendering</p>';

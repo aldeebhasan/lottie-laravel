@@ -38,6 +38,7 @@ You can use the lottie file component directly within your blade as following
  <x-lottie 
  class="class-1 class-2" 
  style="color:red; background-color:blue;" 
+ alt="description of the animation for screen readers"
  path="path to lottie file (.json)"
  animType="animation type (ex: svg)"
  loop="true|false"
@@ -115,6 +116,22 @@ Only you need to provide the lottie file data or path, and you will get your vie
 $data = lottie()->loadUrl('https://assets8.lottiefiles.com/packages/lf20_tuzu65Bu6N.json')->export();
 {!! lottie()->loadData($data)->render() !!}
 ```
+
+### Accessibility
+Use the `alt` attribute to describe the animation for screen reader users.
+The container is then exposed as an image (`role="img"`) with your text as its `aria-label`:
+```php
+<x-lottie alt="A rocket launching into space" path="https://example.json"/>
+
+{!! lottie()->loadUrl('https://example.json')->render(alt: 'A rocket launching into space') !!}
+```
+When `alt` is omitted, the animation is treated as decorative and hidden from assistive
+technologies (`aria-hidden="true"`). The loading indicator is always hidden from them.
+
+### Reduced motion
+Animations respect the user's `prefers-reduced-motion` setting: when it is enabled, autoplay is
+disabled and the animation stays on its first frame (the loading indicator stops spinning too).
+If the setting changes while the page is open, the animation pauses or resumes accordingly.
 
 ### Examples
 - Loading lottie file directly in the blade:

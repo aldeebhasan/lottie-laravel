@@ -51,27 +51,39 @@
                 opacity: 0;
             }
         }
+        @media (prefers-reduced-motion: reduce) {
+            .loader div {
+                animation: none;
+                width: 42px;
+                height: 42px;
+                top: 0;
+                left: 0;
+            }
+        }
 
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
 @endonce
 
-<div style="position: relative;{{ $style }}" class="{{ $class }}">
-    <div class="loader" id="loader-{{$key}}">
+<div style="position: relative;{{ $style }}" class="{{ $class }}"
+     @if ($alt) role="img" aria-label="{{ $alt }}" @else aria-hidden="true" @endif>
+    <div class="loader" id="loader-{{$key}}" aria-hidden="true">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
     </div>
-    <div id="{{$key}}" style="height: 100%;min-height:100px;"></div>
+    <div id="{{$key}}" style="height: 100%;min-height:100px;" aria-hidden="true"></div>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const autoplay = {{$autoplay ?'true' : 'false'}};
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         const anim = bodymovin.loadAnimation({
             wrapper: document.getElementById('{{$key}}'),
             animType: '{{$animType}}',
             loop: {{$loop ?'true' : 'false'}},
-            autoplay: {{$autoplay ?'true' : 'false'}},
+            autoplay: autoplay && !reducedMotion.matches,
             @if ($path)
             path: '{{$path}}',
             @else
@@ -79,6 +91,14 @@
             @endif
         });
         anim.addEventListener('DOMLoaded', () => document.getElementById('loader-{{$key}}').style.display = 'none');
+        // pause on the first frame for users who prefer reduced motion
+        reducedMotion.addEventListener('change', (e) => {
+            if (e.matches) {
+                anim.goToAndStop(0, true);
+            } else if (autoplay) {
+                anim.play();
+            }
+        });
     });
 
 </script>

@@ -62,6 +62,7 @@ class LottieManager
 
     /***
      * render lottie data directly as a view
+     * @param  string  $alt  text announced to screen readers; leave empty for decorative animations
      * @return string
      */
     public function render(
@@ -69,12 +70,13 @@ class LottieManager
         bool $loop = true,
         bool $autoplay = true,
         string $class = '',
-        string $style = ''
+        string $style = '',
+        string $alt = ''
     ): string {
         $data = $this->data;
         return (new LottieComponent())
             ->render()([
-            'attributes' => compact('data', 'animType', 'autoplay', 'loop', 'class', 'style')
+            'attributes' => compact('data', 'animType', 'autoplay', 'loop', 'class', 'style', 'alt')
         ]);
     }
 
