@@ -3,13 +3,19 @@ Laravel Lottie Library
 A php package allow you to load lottie files to your blade directly 
 or after making some updates. 
 
+Requirements
+------------
+
+- PHP 8.1+
+- Laravel 10.x, 11.x or 12.x
+
 Installation
 ------------
 
 Install using composer:
 
 ```bash
-composer require aldeebhasan/lottie-laravel:1.1.0
+composer require aldeebhasan/lottie-laravel
 ```
 
 A new cache capabilities added to the package, you can enable it by using the following keys to your env file:
